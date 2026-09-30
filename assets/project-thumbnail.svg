@@ -1,0 +1,41 @@
+<!--
+  YouTube Learning Toolkit
+  File: assets/project-thumbnail.svg
+  Purpose:
+    Repository/social-preview artwork. It can be used as a GitHub social
+    preview or project thumbnail and is intentionally self-contained SVG.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">YouTube Learning Toolkit project thumbnail</title>
+  <desc id="desc">Blue project banner showing a YouTube learning workspace concept.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1340" cy="160" r="250" fill="#ffffff" opacity=".06"/>
+  <circle cx="1450" cy="720" r="360" fill="#ffffff" opacity=".05"/>
+  <rect x="110" y="130" width="1380" height="640" rx="34" fill="#111827" stroke="#5b8def" stroke-opacity=".45"/>
+  <rect x="160" y="190" width="1280" height="92" rx="18" fill="#172033"/>
+  <rect x="205" y="220" width="520" height="28" rx="14" fill="#334155"/>
+  <rect x="760" y="210" width="150" height="48" rx="12" fill="#2563eb"/>
+  <text x="835" y="242" text-anchor="middle" fill="#ffffff" font-size="21" font-family="Arial, sans-serif">Analyze Video</text>
+  <rect x="160" y="325" width="620" height="370" rx="22" fill="#080b12"/>
+  <circle cx="470" cy="490" r="62" fill="#2563eb"/>
+  <polygon points="452,452 452,528 510,490" fill="#ffffff"/>
+  <rect x="830" y="325" width="610" height="370" rx="22" fill="#f8fafc"/>
+  <rect x="875" y="370" width="300" height="20" rx="10" fill="#cbd5e1"/>
+  <rect x="875" y="420" width="500" height="18" rx="9" fill="#e2e8f0"/>
+  <rect x="875" y="458" width="430" height="18" rx="9" fill="#e2e8f0"/>
+  <rect x="875" y="496" width="470" height="18" rx="9" fill="#e2e8f0"/>
+  <rect x="875" y="560" width="150" height="44" rx="12" fill="#2563eb"/>
+  <text x="950" y="589" text-anchor="middle" fill="#ffffff" font-size="18" font-family="Arial, sans-serif">Vocabulary</text>
+  <text x="120" y="82" fill="#ffffff" font-size="40" font-weight="700" font-family="Arial, sans-serif">
+    YouTube Learning Toolkit
+  </text>
+  <text x="120" y="838" fill="#dbe5f5" font-size="25" font-family="Arial, sans-serif">
+    Thumbnails • Subtitles • Transcript • Vocabulary • Notes • Export
+  </text>
+</svg>
