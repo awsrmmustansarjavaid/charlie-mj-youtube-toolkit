@@ -20,7 +20,7 @@ export function createPlayer(videoId, callbacks = {}) {
     return null;
   }
 
-  const player = new window.YT.Player("player", {
+  const player = new window.YT.Player("youtube-player", {
     videoId,
     playerVars: {
       rel: 0,

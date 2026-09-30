@@ -304,8 +304,8 @@ function mountPlayer(videoId) {
   const playerContainer = document.querySelector("#player");
 
   // Replacing the container avoids conflicts when changing videos.
-  playerContainer.innerHTML = '<div id="youtube-player"></div>';
-  playerContainer.id = "player";
+  // Create a fresh target element for the YouTube IFrame API.
+  playerContainer.innerHTML = '<div id="youtube-player" class="youtube-player-target"></div>';
 
   state.player = createPlayer(videoId, {
     onReady: () => setStatus("YouTube player ready.", "success"),
