@@ -194,3 +194,13 @@ statistics.js
 ```
 
 These should remain modular so that the static core stays easy to understand.
+
+## Subtitle action reliability
+
+The `js/subtitle-actions.js` module independently controls the three primary subtitle actions:
+
+- **Copy** — copies the rendered subtitle text using the Clipboard API with a legacy fallback.
+- **Download TXT** — creates a UTF-8 text file locally with a YouTube-video-based filename.
+- **Share Link** — uses the browser Web Share API when available, then falls back to copying the workspace URL or showing a manual-copy prompt.
+
+These handlers are deliberately separate from `app.js`. Optional YouTube player, translation, or transcript-provider failures therefore do not disable the three basic subtitle actions.
