@@ -174,3 +174,6 @@ The architecture can later be expanded with:
 - Optional user accounts.
 
 These are deliberately not required for the static V1.
+
+## Subtitle and translation update
+See [YOUTUBE-SUBTITLES.md](YOUTUBE-SUBTITLES.md) for the URL-first subtitle workflow, optional local fallback, and word-by-word translation design.

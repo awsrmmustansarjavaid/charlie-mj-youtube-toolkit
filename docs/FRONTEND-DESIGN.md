@@ -72,3 +72,6 @@ The player, thumbnail grid, library rows, navigation, and workspace columns adap
 4. **Static-host friendly:** no build system is required.
 5. **Accessible:** keyboard focus and reduced-motion support are included.
 6. **Extendable:** each feature remains separated into a JavaScript module.
+
+## Subtitle and translation update
+See [YOUTUBE-SUBTITLES.md](YOUTUBE-SUBTITLES.md) for the URL-first subtitle workflow, optional local fallback, and word-by-word translation design.

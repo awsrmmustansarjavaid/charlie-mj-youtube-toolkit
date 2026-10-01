@@ -3,261 +3,311 @@
   Charlie MJ YouTube Toolkit
   File: index.html
   Purpose:
-    Main single-page frontend for the GitHub Pages application.
-  Hosting model:
-    Static HTML/CSS/JavaScript only. No GitHub Actions, server, database,
-    build step, or private API key is required for the frontend.
-  UI stack:
-    Bootstrap 5 provides the responsive grid and utility classes. The local
-    stylesheet extends Bootstrap with the Charlie MJ visual design system.
+    Main single-page interface for the GitHub Pages language-learning toolkit.
+  Design:
+    Restores the original lightweight card/background design while adding
+    Charlie MJ branding, YouTube subtitle fetching, word-by-word translation,
+    thumbnail tools, notes, vocabulary, exports, and local sessions.
+  Hosting:
+    Static GitHub Pages. No GitHub Actions or application server is required.
 -->
 <html lang="en">
 <head>
-  <!-- Standard responsive and accessibility-friendly document metadata. -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1020">
-  <meta name="description" content="Charlie MJ YouTube Toolkit — a static YouTube thumbnail, transcript, vocabulary, notes, and learning workspace for GitHub Pages.">
-  <meta name="color-scheme" content="dark light">
-
-  <!-- Search/share metadata kept intentionally simple for a static GitHub Pages project. -->
-  <meta property="og:title" content="Charlie MJ YouTube Toolkit">
-  <meta property="og:description" content="A YouTube learning workspace for thumbnails, transcripts, vocabulary, notes, and exports.">
-  <meta property="og:type" content="website">
-
-  <!-- Browser title. -->
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Charlie MJ YouTube Toolkit for subtitles, transcripts, thumbnails, vocabulary, translation, notes, and language learning.">
   <title>Charlie MJ YouTube Toolkit</title>
-
-  <!-- Bootstrap supplies the responsive grid, cards, utilities, and components. -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-  <!-- Local design system and component overrides. -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-  <!-- Decorative background layers create the premium glass/aurora appearance without images or a build process. -->
-  <div class="ambient-background" aria-hidden="true">
-    <span class="ambient-orb orb-one"></span>
-    <span class="ambient-orb orb-two"></span>
-    <span class="ambient-orb orb-three"></span>
-    <span class="grid-overlay"></span>
-  </div>
-
-  <!-- Top identity strip: Pakistan and Türkiye flags are part of the application's visual learning identity. -->
-  <div class="flag-strip">
-    <div class="container-fluid px-3 px-lg-4 d-flex justify-content-between align-items-center gap-3">
-      <div class="flag-message"><span class="pulse-dot"></span> Language • Learning • YouTube Toolkit</div>
-      <div class="flag-pair" aria-label="Pakistan and Türkiye visual identity">
-        <span class="flag-badge"><img src="assets/pakistan-flag.svg" alt="Pakistan flag"> Pakistan</span>
-        <span class="flag-divider">×</span>
-        <span class="flag-badge"><img src="assets/turkiye-flag.svg" alt="Türkiye flag"> Türkiye</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Sticky Bootstrap navbar enhanced with the local Charlie MJ branding. -->
+  <!-- Original-style sticky header with the requested Charlie MJ text logo. -->
   <header class="site-header">
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container-fluid px-3 px-lg-4">
-        <a class="navbar-brand brand-lockup" href="#top" aria-label="Charlie MJ YouTube Toolkit home">
-          <span class="brand-logo">CMJ</span>
-          <span class="brand-text">
-            <strong>Charlie MJ</strong>
-            <small>YouTube Toolkit</small>
-          </span>
-        </a>
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Charlie MJ YouTube Toolkit home">
+        <span class="brand-mark">CMJ</span>
+        <span>
+          <strong>Charlie MJ</strong>
+          <small>YouTube Learning Toolkit</small>
+        </span>
+      </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div id="mainNavigation" class="collapse navbar-collapse">
-          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-            <li class="nav-item"><a class="nav-link" href="#toolkit">Toolkit</a></li>
-            <li class="nav-item"><a class="nav-link" href="#learning">Learning</a></li>
-            <li class="nav-item"><a class="nav-link" href="#library">Library</a></li>
-            <li class="nav-item"><a class="nav-link" href="#export">Export</a></li>
-            <li class="nav-item ms-lg-2"><button id="themeToggle" class="theme-toggle" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">☼</button></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="#toolkit">Toolkit</a>
+        <a href="#learning">Learning</a>
+        <a href="#library">Library</a>
+        <button id="themeToggle" class="icon-button" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">◐</button>
+      </nav>
+    </div>
   </header>
 
   <main id="top">
-    <!-- Hero area combines product messaging, quick actions, and the YouTube URL analyzer. -->
-    <section class="hero-section">
-      <div class="container-fluid px-3 px-lg-4">
-        <div class="row align-items-center g-4 g-xl-5">
-          <div class="col-xl-7">
-            <div class="hero-kicker"><span class="status-dot"></span> Free • Open Source • GitHub Pages</div>
-            <h1 class="hero-title">Your <span class="gradient-text">YouTube</span> video, redesigned for learning.</h1>
-            <p class="hero-lead">Analyze a YouTube URL, explore thumbnails, work with subtitles, build vocabulary, capture notes, and export a portable study session — all inside one modern browser workspace.</p>
-
-            <!-- Quick feature chips make the app's purpose visible before the user interacts with it. -->
-            <div class="feature-pills">
-              <span>▶ Embedded Player</span><span>▣ Thumbnail Tools</span><span>CC Transcript</span><span>Ａ Vocabulary</span><span>↧ Export</span>
-            </div>
-
-            <div class="hero-stats row g-2 mt-4">
-              <div class="col-6 col-md-3"><div class="stat-mini"><strong id="heroSessionsCount">0</strong><span>Saved Sessions</span></div></div>
-              <div class="col-6 col-md-3"><div class="stat-mini"><strong id="heroWordsCount">0</strong><span>Vocabulary</span></div></div>
-              <div class="col-6 col-md-3"><div class="stat-mini"><strong id="heroLinesCount">0</strong><span>Transcript Lines</span></div></div>
-              <div class="col-6 col-md-3"><div class="stat-mini"><strong>100%</strong><span>Browser UI</span></div></div>
-            </div>
-          </div>
-
-          <div class="col-xl-5">
-            <!-- Glass URL analyzer card is the primary action of the application. -->
-            <div class="glass-panel analyzer-card">
-              <div class="panel-topline"><span class="eyebrow">VIDEO ANALYZER</span><span class="live-badge">LOCAL UI</span></div>
-              <form id="videoForm">
-                <label for="youtubeUrl" class="form-label">YouTube video URL</label>
-                <div class="input-group input-group-lg url-input-group">
-                  <span class="input-group-text">↗</span>
-                  <input id="youtubeUrl" name="youtubeUrl" type="url" class="form-control" placeholder="youtube.com/watch?v=..." autocomplete="off" required>
-                  <button class="btn btn-primary" type="submit">Analyze</button>
-                </div>
-                <div class="form-hint mt-2">Supports YouTube watch, youtu.be, Shorts, and embed URLs.</div>
-              </form>
-              <div class="quick-actions mt-4">
-                <button class="quick-action" type="button" data-scroll-target="#toolkit">Open Workspace <span>↓</span></button>
-                <button class="quick-action" type="button" data-scroll-target="#learning">Learning Mode <span>→</span></button>
-                <button class="quick-action" type="button" data-scroll-target="#library">My Library <span>→</span></button>
-              </div>
-            </div>
-          </div>
+    <!-- Hero keeps the previous simple background/layout instead of the newer aurora dashboard. -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-copy">
+          <span class="eyebrow">CHARLIE MJ • FREE • OPEN SOURCE • GITHUB PAGES</span>
+          <h1>Turn a YouTube video into a language-learning workspace.</h1>
+          <p>
+            Paste a YouTube URL, fetch its available subtitles, copy the transcript,
+            follow timestamps, translate Turkish/Urdu words into English, build vocabulary,
+            take notes, and export your study material.
+          </p>
         </div>
-        <div id="statusMessage" class="status mt-3" role="status" aria-live="polite"></div>
+
+        <!-- Noteey-style primary workflow: paste URL and get subtitles. -->
+        <form id="videoForm" class="url-form">
+          <label for="youtubeUrl">YouTube video URL</label>
+          <div class="url-row">
+            <input id="youtubeUrl" name="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" required>
+            <button class="primary-button" type="submit">Analyze Video</button>
+          </div>
+          <p class="form-hint">Supports watch, youtu.be, Shorts, embed, and live-style YouTube URLs.</p>
+
+          <div class="workflow-actions">
+            <button id="getYouTubeSubtitlesButton" class="primary-button" type="button">Get YouTube Subtitles</button>
+            <a class="secondary-button button-link" href="https://www.noteey.com/youtube-subtitle-downloader" target="_blank" rel="noopener noreferrer">Compare with Noteey ↗</a>
+          </div>
+        </form>
+
+        <div id="statusMessage" class="status" role="status" aria-live="polite"></div>
       </div>
     </section>
 
-    <!-- Main workspace begins with an overview and live session metrics. -->
-    <section id="toolkit" class="section-shell">
-      <div class="container-fluid px-3 px-lg-4">
-        <div class="section-heading-row">
-          <div><span class="eyebrow">01 / VIDEO WORKSPACE</span><h2>Your YouTube Toolkit</h2><p>One workspace for watching, collecting, organizing, and learning.</p></div>
-          <button id="saveSessionButton" class="btn btn-primary rounded-pill px-4" type="button">＋ Save Session</button>
+    <section id="toolkit" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">VIDEO WORKSPACE</span>
+            <h2>Your YouTube Toolkit</h2>
+          </div>
+          <button id="saveSessionButton" class="secondary-button" type="button">Save Session</button>
         </div>
 
-        <article class="glass-panel video-overview-card">
-          <div class="row g-4 align-items-center">
-            <div class="col-lg-4 col-xl-3">
-              <div class="thumbnail-frame">
-                <img id="videoThumbnail" src="assets/video-placeholder.svg" alt="Video thumbnail preview">
-                <span class="thumbnail-overlay">THUMBNAIL</span>
-              </div>
+        <article class="video-overview card">
+          <div class="video-meta">
+            <div class="thumbnail-frame">
+              <img id="videoThumbnail" src="assets/video-placeholder.svg" alt="Video thumbnail preview">
             </div>
-            <div class="col-lg-8 col-xl-9">
-              <span class="label-soft">Detected video</span>
-              <h3 id="videoTitle" class="video-title">Paste a YouTube URL above</h3>
-              <p id="videoId" class="muted mb-3">Video ID: —</p>
-              <div class="d-flex flex-wrap gap-2 mb-3">
-                <span class="chip" id="videoTypeChip">Not analyzed</span><span class="chip">Client-side</span><span class="chip">No login</span>
+            <div class="video-details">
+              <span class="label">Detected video</span>
+              <h3 id="videoTitle">Paste a YouTube URL above</h3>
+              <p id="videoId">Video ID: —</p>
+              <div class="chip-row">
+                <span class="chip" id="videoTypeChip">Not analyzed</span>
+                <span class="chip" id="subtitleStatusChip">Subtitles not loaded</span>
+                <span class="chip">No login</span>
               </div>
-              <div class="d-flex flex-wrap gap-2">
-                <a id="openYouTubeLink" class="btn btn-outline-light rounded-pill" href="#" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a>
-                <button id="copyVideoUrlButton" class="btn btn-outline-light rounded-pill" type="button">Copy URL</button>
-              </div>
+              <a id="openYouTubeLink" class="text-link" href="#" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a>
             </div>
           </div>
         </article>
 
-        <!-- Bootstrap's responsive row/column grid forms the main two-column application layout. -->
-        <div class="row g-4 mt-1">
-          <div class="col-xl-8">
-            <div class="d-grid gap-4">
-              <article class="glass-panel workspace-card">
-                <div class="card-heading-row"><div><span class="eyebrow">PLAYER</span><h3>YouTube Player</h3></div><span class="muted">Official embedded player</span></div>
-                <div id="player" class="player-shell"><div class="player-empty"><span class="player-icon">▶</span><p>Analyze a video to load the player.</p></div></div>
-                <div class="d-flex flex-wrap gap-2 mt-3">
-                  <button id="playButton" class="btn btn-primary" type="button">Play</button><button id="pauseButton" class="btn btn-outline-light" type="button">Pause</button><button id="restartButton" class="btn btn-outline-light" type="button">Restart</button><button id="readingModeButton" class="btn btn-outline-light ms-lg-auto" type="button">☰ Reading Mode</button>
+        <div class="workspace-grid">
+          <div class="workspace-main">
+            <article class="card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">PLAYER</span>
+                  <h3>YouTube Player</h3>
                 </div>
-              </article>
+                <span class="muted">Official embedded player</span>
+              </div>
+              <div id="player" class="player-shell">
+                <div class="player-empty">
+                  <span class="player-icon">▶</span>
+                  <p>Analyze a video to load the player.</p>
+                </div>
+              </div>
+              <div class="button-row wrap">
+                <button id="playButton" class="secondary-button" type="button">Play</button>
+                <button id="pauseButton" class="secondary-button" type="button">Pause</button>
+                <button id="restartButton" class="secondary-button" type="button">Restart</button>
+              </div>
+            </article>
 
-              <article class="glass-panel workspace-card">
-                <div class="card-heading-row"><div><span class="eyebrow">THUMBNAILS</span><h3>Thumbnail Downloader</h3></div><span id="thumbnailStatus" class="muted">Waiting for URL</span></div>
-                <div id="thumbnailGrid" class="thumbnail-grid"></div>
-              </article>
-            </div>
+            <article class="card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">THUMBNAILS</span>
+                  <h3>Thumbnail Downloader</h3>
+                </div>
+                <span id="thumbnailStatus" class="muted">Waiting for URL</span>
+              </div>
+              <div id="thumbnailGrid" class="thumbnail-grid"></div>
+            </article>
           </div>
 
-          <div class="col-xl-4">
-            <div class="d-grid gap-4">
-              <article class="glass-panel workspace-card transcript-card">
-                <div class="card-heading-row"><div><span class="eyebrow">02 / TRANSCRIPT</span><h3>Subtitle Workspace</h3></div><span class="tool-badge">SRT • VTT • TXT</span></div>
-                <div class="input-stack">
-                  <label for="subtitleFile" class="form-label">Load local subtitle file</label>
-                  <input id="subtitleFile" class="form-control" type="file" accept=".srt,.vtt,.txt,.csv,.json,text/plain,text/vtt">
-                  <label for="transcriptInput" class="form-label mt-2">Or paste subtitle/transcript text</label>
-                  <textarea id="transcriptInput" class="form-control" rows="8" placeholder="Paste SRT, VTT, or plain transcript text here..."></textarea>
+          <aside class="workspace-side">
+            <!-- Default subtitle source is the YouTube URL; local import is deliberately secondary. -->
+            <article class="card transcript-card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">01 / YOUTUBE SUBTITLES</span>
+                  <h3>Subtitle Downloader</h3>
                 </div>
-                <div class="d-flex flex-wrap gap-2 mt-3">
-                  <button id="cleanTranscriptButton" class="btn btn-primary" type="button">Organize Transcript</button><button id="copyTranscriptButton" class="btn btn-outline-light" type="button">Copy</button><button id="clearTranscriptButton" class="btn btn-outline-light" type="button">Clear</button>
-                </div>
-                <label for="transcriptSearch" class="form-label mt-3">Search transcript</label>
-                <input id="transcriptSearch" class="form-control" type="search" placeholder="Search words or phrases...">
-                <div id="transcriptOutput" class="transcript-output mt-3"><p class="empty-state">Your organized transcript will appear here.</p></div>
-              </article>
+                <span class="tool-badge">URL FIRST</span>
+              </div>
 
-              <article id="learning" class="glass-panel workspace-card">
-                <div class="card-heading-row"><div><span class="eyebrow">03 / LANGUAGE LEARNING</span><h3>Vocabulary Builder</h3></div><span class="tool-badge">Local</span></div>
-                <div class="row g-2">
-                  <div class="col-6"><label for="sourceLanguage" class="form-label">Source language</label><input id="sourceLanguage" class="form-control" type="text" placeholder="Turkish"></div>
-                  <div class="col-6"><label for="targetLanguage" class="form-label">Target language</label><input id="targetLanguage" class="form-control" type="text" placeholder="English"></div>
+              <div class="subtitle-controls">
+                <div>
+                  <label for="subtitleLanguage">Subtitle language</label>
+                  <select id="subtitleLanguage">
+                    <option value="auto">Auto detect</option>
+                    <option value="tr">Turkish</option>
+                    <option value="ur">Urdu</option>
+                    <option value="en">English</option>
+                    <option value="ar">Arabic</option>
+                    <option value="fa">Persian</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                  </select>
                 </div>
-                <button id="extractVocabularyButton" class="btn btn-primary w-100 mt-3" type="button">Extract Vocabulary</button>
-                <div id="vocabularyOutput" class="vocabulary-list mt-3"><p class="empty-state">Clean your transcript, then extract vocabulary.</p></div>
-              </article>
+                <div>
+                  <label for="targetLanguage">Translation target</label>
+                  <select id="targetLanguage">
+                    <option value="en">English</option>
+                    <option value="ur">Urdu</option>
+                    <option value="tr">Turkish</option>
+                    <option value="ar">Arabic</option>
+                    <option value="fa">Persian</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                  </select>
+                </div>
+              </div>
 
-              <article class="glass-panel workspace-card">
-                <div class="card-heading-row"><div><span class="eyebrow">04 / PERSONAL NOTES</span><h3>Study Notes</h3></div></div>
-                <textarea id="notesInput" class="form-control" rows="7" placeholder="Vocabulary, grammar notes, useful sentences, reminders..."></textarea>
-                <button id="saveNotesButton" class="btn btn-primary w-100 mt-3" type="button">Save Notes Locally</button>
-              </article>
-            </div>
-          </div>
+              <div class="toggle-row">
+                <label class="check-label"><input id="showTimestamps" type="checkbox" checked> Show timestamps</label>
+                <label class="check-label"><input id="wordByWordToggle" type="checkbox"> Word-by-word translation</label>
+              </div>
+
+              <div class="button-row wrap">
+                <button id="getSubtitlesButton" class="primary-button" type="button">Get Subtitles</button>
+                <button id="copyTranscriptButton" class="secondary-button" type="button">Copy</button>
+                <button id="downloadTranscriptButton" class="secondary-button" type="button">Download TXT</button>
+                <button id="shareSubtitleButton" class="secondary-button" type="button">Share Link</button>
+                <button id="clearTranscriptButton" class="secondary-button" type="button">Clear</button>
+              </div>
+
+              <p id="subtitleSourceInfo" class="form-hint">Paste a YouTube URL above, then click Get Subtitles.</p>
+
+              <div class="optional-import">
+                <details>
+                  <summary>Optional: import a local subtitle file</summary>
+                  <div class="input-stack details-body">
+                    <label for="subtitleFile">SRT / VTT / TXT file</label>
+                    <input id="subtitleFile" type="file" accept=".srt,.vtt,.txt,text/plain,text/vtt">
+                    <label for="transcriptInput">Or paste subtitle text manually</label>
+                    <textarea id="transcriptInput" rows="7" placeholder="Optional fallback: paste SRT, VTT, or plain transcript text here..."></textarea>
+                    <button id="cleanTranscriptButton" class="secondary-button" type="button">Use Pasted Text</button>
+                  </div>
+                </details>
+              </div>
+
+              <label for="transcriptSearch">Search transcript</label>
+              <input id="transcriptSearch" type="search" placeholder="Search words or phrases...">
+
+              <div id="transcriptOutput" class="transcript-output">
+                <p class="empty-state">Your YouTube subtitles will appear here.</p>
+              </div>
+            </article>
+
+            <article id="learning" class="card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">02 / LANGUAGE LEARNING</span>
+                  <h3>Word-by-Word Study</h3>
+                </div>
+                <span class="tool-badge">TR • UR • EN</span>
+              </div>
+              <p class="form-hint">When enabled, each subtitle sentence is split into words and translated individually. Translation is machine-assisted and should be checked for context.</p>
+              <button id="translateTranscriptButton" class="primary-button full-width" type="button">Translate Words</button>
+              <div id="translationProgress" class="form-hint"></div>
+              <div id="translationOutput" class="translation-output">
+                <p class="empty-state">Enable Word-by-word translation and click Translate Words.</p>
+              </div>
+
+              <div class="vocabulary-divider"></div>
+              <h3 class="small-heading">Vocabulary Builder</h3>
+              <div class="two-field-grid">
+                <div>
+                  <label for="sourceLanguage">Source language</label>
+                  <input id="sourceLanguage" type="text" value="Turkish" placeholder="Turkish">
+                </div>
+                <div>
+                  <label for="vocabularyTargetLanguage">Target language</label>
+                  <input id="vocabularyTargetLanguage" type="text" value="English" placeholder="English">
+                </div>
+              </div>
+              <div class="button-row">
+                <button id="extractVocabularyButton" class="primary-button" type="button">Extract Words</button>
+              </div>
+              <div id="vocabularyOutput" class="vocabulary-list">
+                <p class="empty-state">Load subtitles, then extract useful words.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">03 / PERSONAL NOTES</span>
+                  <h3>Study Notes</h3>
+                </div>
+              </div>
+              <textarea id="notesInput" rows="8" placeholder="Vocabulary, grammar notes, useful sentences, timestamps, or reminders..."></textarea>
+              <div class="button-row">
+                <button id="saveNotesButton" class="primary-button" type="button">Save Notes</button>
+              </div>
+            </article>
+          </aside>
         </div>
       </div>
     </section>
 
-    <!-- Export section provides four portable formats and a visual explanation of portability. -->
-    <section id="export" class="section-shell section-dark">
-      <div class="container-fluid px-3 px-lg-4">
-        <div class="section-heading-row"><div><span class="eyebrow">05 / EXPORT</span><h2>Take your learning data with you</h2><p>Export structured or human-readable study files directly from the browser.</p></div></div>
-        <div class="row g-3">
-          <div class="col-sm-6 col-xl-3"><button class="export-card w-100" data-export="txt" type="button"><span class="export-icon">TXT</span><strong>Plain Text</strong><span>Clean readable transcript</span></button></div>
-          <div class="col-sm-6 col-xl-3"><button class="export-card w-100" data-export="md" type="button"><span class="export-icon">MD</span><strong>Markdown</strong><span>Notes-friendly study document</span></button></div>
-          <div class="col-sm-6 col-xl-3"><button class="export-card w-100" data-export="json" type="button"><span class="export-icon">{ }</span><strong>JSON</strong><span>Structured learning data</span></button></div>
-          <div class="col-sm-6 col-xl-3"><button class="export-card w-100" data-export="csv" type="button"><span class="export-icon">CSV</span><strong>CSV</strong><span>Vocabulary/spreadsheet data</span></button></div>
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">EXPORT</span>
+            <h2>Take your learning data with you</h2>
+          </div>
+        </div>
+        <div class="export-grid">
+          <button class="export-card" data-export="txt" type="button"><strong>TXT</strong><span>Clean readable transcript</span></button>
+          <button class="export-card" data-export="md" type="button"><strong>Markdown</strong><span>Transcript + notes</span></button>
+          <button class="export-card" data-export="json" type="button"><strong>JSON</strong><span>Structured learning data</span></button>
+          <button class="export-card" data-export="csv" type="button"><strong>CSV</strong><span>Vocabulary data</span></button>
         </div>
       </div>
     </section>
 
-    <!-- Local browser library keeps saved sessions private to the current browser profile. -->
-    <section id="library" class="section-shell">
-      <div class="container-fluid px-3 px-lg-4">
-        <div class="section-heading-row"><div><span class="eyebrow">06 / LOCAL LIBRARY</span><h2>Saved Sessions</h2><p>Your sessions stay in browser local storage until you clear them.</p></div><button id="clearLibraryButton" class="btn btn-outline-danger rounded-pill" type="button">Clear Library</button></div>
+    <section id="library" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">LOCAL LIBRARY</span>
+            <h2>Saved Sessions</h2>
+          </div>
+          <button id="clearLibraryButton" class="danger-button" type="button">Clear Library</button>
+        </div>
         <div id="libraryList" class="library-list"><p class="empty-state">No saved sessions yet.</p></div>
       </div>
     </section>
   </main>
 
-  <!-- Footer closes the product identity and explains the static hosting model. -->
   <footer class="site-footer">
-    <div class="container-fluid px-3 px-lg-4 py-4 d-flex flex-column flex-md-row justify-content-between gap-2">
-      <div><strong>Charlie MJ</strong> • YouTube Toolkit</div><div class="muted">Static GitHub Pages frontend • No GitHub Actions required</div>
+    <div class="container footer-inner">
+      <p><strong>Charlie MJ</strong> • YouTube Toolkit</p>
+      <p>Static GitHub Pages • No GitHub Actions required</p>
     </div>
   </footer>
 
-  <!-- Bootstrap JavaScript enables the responsive navbar and other Bootstrap UI behavior. -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-  <!-- YouTube IFrame API provides the embedded player. -->
+  <!-- YouTube IFrame API provides the official embedded player. -->
   <script src="https://www.youtube.com/iframe_api"></script>
-
-  <!-- Main application module and feature modules are loaded as ES modules. -->
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

@@ -180,3 +180,6 @@ A backend becomes reasonable if the project later needs:
 - Large file processing.
 
 The frontend should remain independent from those services as much as possible.
+
+## Subtitle and translation update
+See [YOUTUBE-SUBTITLES.md](YOUTUBE-SUBTITLES.md) for the URL-first subtitle workflow, optional local fallback, and word-by-word translation design.
