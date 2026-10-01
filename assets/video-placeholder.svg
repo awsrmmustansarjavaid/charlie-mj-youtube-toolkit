@@ -1,17 +1,17 @@
 <!--
-  YouTube Learning Toolkit
+  Charlie MJ YouTube Toolkit
   File: assets/video-placeholder.svg
   Purpose:
     Lightweight placeholder shown before a YouTube URL is analyzed.
     SVG is used so the asset stays sharp and requires no binary dependency.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
-  <title id="title">YouTube Learning Toolkit placeholder</title>
+  <title id="title">Charlie MJ YouTube Toolkit placeholder</title>
   <desc id="desc">Placeholder image for the video preview area.</desc>
   <rect width="1280" height="720" fill="#172033"/>
   <circle cx="640" cy="330" r="74" fill="#2563eb"/>
   <polygon points="620,292 620,368 684,330" fill="#ffffff"/>
   <text x="640" y="470" text-anchor="middle" fill="#dbe5f5" font-size="42" font-family="Arial, sans-serif">
-    YouTube Learning Toolkit
+    Charlie MJ YouTube Toolkit
   </text>
 </svg>

@@ -88,7 +88,13 @@ const elements = {
   themeToggle: document.querySelector("#themeToggle"),
   playButton: document.querySelector("#playButton"),
   pauseButton: document.querySelector("#pauseButton"),
-  restartButton: document.querySelector("#restartButton")
+  restartButton: document.querySelector("#restartButton"),
+  copyTranscriptButton: document.querySelector("#copyTranscriptButton"),
+  copyVideoUrlButton: document.querySelector("#copyVideoUrlButton"),
+  readingModeButton: document.querySelector("#readingModeButton"),
+  heroSessionsCount: document.querySelector("#heroSessionsCount"),
+  heroWordsCount: document.querySelector("#heroWordsCount"),
+  heroLinesCount: document.querySelector("#heroLinesCount")
 };
 
 /* ---------- Utility functions ---------- */
@@ -130,6 +136,9 @@ function renderTranscript() {
   });
 
   elements.transcriptOutput.innerHTML = "";
+  if (elements.heroLinesCount) {
+    elements.heroLinesCount.textContent = String(state.transcript.length);
+  }
 
   if (!filtered.length) {
     elements.transcriptOutput.innerHTML = '<p class="empty-state">No matching transcript entries.</p>';
@@ -195,6 +204,9 @@ function saveCurrentSession() {
  */
 function renderLibrary() {
   const sessions = loadSessions();
+  if (elements.heroSessionsCount) {
+    elements.heroSessionsCount.textContent = String(sessions.length);
+  }
   elements.libraryList.innerHTML = "";
 
   if (!sessions.length) {
@@ -304,8 +316,8 @@ function mountPlayer(videoId) {
   const playerContainer = document.querySelector("#player");
 
   // Replacing the container avoids conflicts when changing videos.
-  // Create a fresh target element for the YouTube IFrame API.
-  playerContainer.innerHTML = '<div id="youtube-player" class="youtube-player-target"></div>';
+  playerContainer.innerHTML = '<div id="youtube-player"></div>';
+  playerContainer.id = "player";
 
   state.player = createPlayer(videoId, {
     onReady: () => setStatus("YouTube player ready.", "success"),
@@ -412,6 +424,43 @@ function exportWorkspace(format) {
   }
 }
 
+/* ---------- Enhanced frontend helpers ---------- */
+
+/**
+ * Copy text using the browser Clipboard API and show a short status message.
+ * Clipboard access is optional; the application continues to work without it.
+ * @param {string} value - Text to copy.
+ * @param {string} successMessage - Feedback displayed after copying.
+ */
+async function copyToClipboard(value, successMessage) {
+  if (!value) {
+    setStatus("There is nothing to copy yet.", "error");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(value);
+    setStatus(successMessage, "success");
+  } catch {
+    setStatus("Clipboard access was blocked by the browser. Use the export buttons instead.", "error");
+  }
+}
+
+/**
+ * Toggle the distraction-free transcript reading overlay.
+ */
+function toggleReadingMode() {
+  const active = document.body.classList.toggle("reading-mode");
+  elements.readingModeButton.textContent = active ? "✕ Close Reading Mode" : "☰ Reading Mode";
+}
+
+/**
+ * Smoothly scroll to a local section selected by a quick-action button.
+ * @param {string} selector - CSS selector for the destination.
+ */
+function scrollToSection(selector) {
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 /* ---------- Event listeners ---------- */
 
 elements.videoForm.addEventListener("submit", (event) => {
@@ -437,6 +486,9 @@ elements.transcriptSearch.addEventListener("input", renderTranscript);
 elements.extractVocabularyButton.addEventListener("click", () => {
   const text = transcriptToText(state.transcript);
   state.vocabulary = extractVocabulary(text);
+  if (elements.heroWordsCount) {
+    elements.heroWordsCount.textContent = String(state.vocabulary.length);
+  }
   renderVocabulary(elements.vocabularyOutput, state.vocabulary);
 
   if (state.vocabulary.length) {
@@ -472,6 +524,20 @@ elements.restartButton.addEventListener("click", () => {
   }
 });
 
+// Copy the currently analyzed YouTube URL for quick sharing.
+elements.copyVideoUrlButton?.addEventListener("click", () => copyToClipboard(state.videoUrl || elements.youtubeUrl.value, "YouTube URL copied to the clipboard."));
+
+// Copy the cleaned transcript as plain text.
+elements.copyTranscriptButton?.addEventListener("click", () => copyToClipboard(transcriptToText(state.transcript), "Transcript copied to the clipboard."));
+
+// Toggle a focused transcript reading view for language study.
+elements.readingModeButton?.addEventListener("click", toggleReadingMode);
+
+// Wire hero quick actions without introducing a frontend router.
+document.querySelectorAll("[data-scroll-target]").forEach((button) => {
+  button.addEventListener("click", () => scrollToSection(button.dataset.scrollTarget));
+});
+
 /* ---------- Theme handling ---------- */
 const storedTheme = loadTheme();
 
@@ -499,32 +565,3 @@ window.onYouTubeIframeAPIReady = () => {
 
 /* ---------- Initial render ---------- */
 renderLibrary();
-
-/* -------------------------------------------------------------------------
-   Frontend enhancement layer
-   These additions are intentionally independent from the original toolkit
-   modules so the static GitHub Pages architecture stays easy to maintain.
-   ------------------------------------------------------------------------- */
-(function initFrontendEnhancements() {
-  // Remember the visitor's preferred visual theme in local browser storage.
-  const themeToggle = document.getElementById('themeToggle');
-  const storedTheme = localStorage.getItem('charlie-mj-theme');
-  if (storedTheme === 'light') document.body.classList.add('light-mode');
-
-  // Toggle between the premium dark interface and a bright reading mode.
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      localStorage.setItem('charlie-mj-theme', isLight ? 'light' : 'dark');
-      themeToggle.innerHTML = isLight ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon-stars"></i>';
-    });
-    themeToggle.innerHTML = document.body.classList.contains('light-mode') ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon-stars"></i>';
-  }
-
-  // Add a subtle focus effect to major dashboard cards when keyboard users enter them.
-  document.querySelectorAll('.dashboard-card, .feature-mini, .export-card').forEach((card) => {
-    card.addEventListener('mouseenter', () => card.classList.add('is-hovered'));
-    card.addEventListener('mouseleave', () => card.classList.remove('is-hovered'));
-  });
-})();

@@ -16,8 +16,8 @@ No Node.js installation is required.
 ## Clone
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/youtube-learning-toolkit.git
-cd youtube-learning-toolkit
+git clone https://github.com/YOUR-USERNAME/charlie-mj-youtube-toolkit.git
+cd charlie-mj-youtube-toolkit
 ```
 
 ---

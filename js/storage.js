@@ -9,8 +9,8 @@
     Local storage is device/browser-specific and is not a cloud backup.
 */
 
-const STORAGE_KEY = "youtube-learning-toolkit.sessions.v1";
-const THEME_KEY = "youtube-learning-toolkit.theme.v1";
+const STORAGE_KEY = "charlie-mj-youtube-toolkit.sessions.v1";
+const THEME_KEY = "charlie-mj-youtube-toolkit.theme.v1";
 
 /**
  * Load all locally saved sessions.

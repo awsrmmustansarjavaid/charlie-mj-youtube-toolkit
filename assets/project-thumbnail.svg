@@ -1,12 +1,12 @@
 <!--
-  YouTube Learning Toolkit
+  Charlie MJ YouTube Toolkit
   File: assets/project-thumbnail.svg
   Purpose:
     Repository/social-preview artwork. It can be used as a GitHub social
     preview or project thumbnail and is intentionally self-contained SVG.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">YouTube Learning Toolkit project thumbnail</title>
+  <title id="title">Charlie MJ YouTube Toolkit project thumbnail</title>
   <desc id="desc">Blue project banner showing a YouTube learning workspace concept.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
@@ -33,7 +33,7 @@
   <rect x="875" y="560" width="150" height="44" rx="12" fill="#2563eb"/>
   <text x="950" y="589" text-anchor="middle" fill="#ffffff" font-size="18" font-family="Arial, sans-serif">Vocabulary</text>
   <text x="120" y="82" fill="#ffffff" font-size="40" font-weight="700" font-family="Arial, sans-serif">
-    YouTube Learning Toolkit
+    Charlie MJ YouTube Toolkit
   </text>
   <text x="120" y="838" fill="#dbe5f5" font-size="25" font-family="Arial, sans-serif">
     Thumbnails • Subtitles • Transcript • Vocabulary • Notes • Export

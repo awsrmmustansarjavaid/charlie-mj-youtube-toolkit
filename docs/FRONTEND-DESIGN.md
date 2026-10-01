@@ -1,48 +1,74 @@
 # Frontend Design & UX
 
-## Visual direction
+## Visual Direction
 
-Charlie MJ YouTube Toolkit uses a modern dashboard visual language designed for a learning utility rather than a basic downloader page.
+Charlie MJ YouTube Toolkit uses a dark, modern learning-dashboard style rather than a plain utility website. The interface combines glass panels, an aurora background, subtle grid texture, rounded controls, responsive cards, and a strong Charlie MJ brand mark.
 
-### Main design elements
+## Pakistan × Türkiye Identity
 
-- **Charlie MH text logo** in the top navigation.
-- Sticky glass navigation bar.
-- Aurora-style radial background lighting.
-- Subtle technical grid background.
-- Glassmorphism dashboard cards.
-- Bootstrap responsive grid system.
-- Large editorial hero typography.
-- Gradient primary actions.
-- Compact status pills and live indicators.
-- Consistent spacing and rounded card system.
-- Dark-first interface with optional light mode.
-- Reduced-motion support for accessibility.
+The top strip displays self-contained SVG versions of the Pakistan and Türkiye flags. They are decorative identity elements for the language-learning concept and do not depend on a third-party image host.
 
-## Frontend suggestions implemented
+## Bootstrap Grid
 
-### 1. Dashboard layout
+Bootstrap 5.3 provides the main responsive grid:
 
-Instead of a single vertical form, the application is divided into media, transcript, learning, and export areas.
+- `container-fluid` for full-width dashboard sections.
+- `row` and `col-*` for responsive content distribution.
+- `col-xl-8` for the primary video workspace.
+- `col-xl-4` for transcript, vocabulary, and notes tools.
+- Responsive cards collapse into a single-column layout on smaller screens.
 
-### 2. Visual hierarchy
+## Custom CSS Layer
 
-The page now has a clear flow:
+Bootstrap is not the complete visual design. `css/style.css` adds:
 
-`Analyze → Video → Player → Thumbnail → Transcript → Vocabulary → Notes → Export`
+- CSS custom properties for colors and spacing.
+- Glassmorphism surfaces.
+- Animated background orbs.
+- Grid texture overlay.
+- Gradient typography.
+- Custom chips and status badges.
+- Thumbnail presentation.
+- Transcript rows.
+- Export tiles.
+- Responsive navigation.
+- Accessibility focus states.
+- `prefers-reduced-motion` handling.
 
-### 3. Quick capability cards
+## Frontend Enhancements
 
-A feature strip immediately communicates the four core areas of the application.
+### Dashboard statistics
 
-### 4. Responsive Bootstrap grid
+The hero displays live counts for saved sessions, vocabulary candidates, and transcript lines.
 
-Bootstrap's `container`, `row`, and `col-*` classes handle structural responsiveness. Custom CSS handles branding and component appearance.
+### Quick actions
 
-### 5. Theme memory
+The hero card provides one-click navigation to the workspace, learning section, and local library.
 
-The light/dark choice is stored in LocalStorage so the browser can remember the visitor's preference.
+### Reading Mode
 
-### 6. Future-ready extension points
+Reading Mode turns the transcript card into a focused overlay so a learner can concentrate on subtitle text without visual distractions.
 
-The frontend is intentionally modular. AI transcript organization, translation, OCR, Anki export, and playlist workflows can be added without replacing the main layout.
+### Clipboard actions
+
+The interface includes copy actions for the analyzed YouTube URL and cleaned transcript. The application gracefully reports when browser clipboard permission is unavailable.
+
+### Responsive behavior
+
+The application is designed for:
+
+- Desktop monitors.
+- Laptops.
+- Tablets.
+- Mobile screens.
+
+The player, thumbnail grid, library rows, navigation, and workspace columns adapt to the available width.
+
+## Design Principles
+
+1. **Learning first:** transcript and vocabulary tools remain prominent.
+2. **Low friction:** common actions are reachable from the hero and workspace cards.
+3. **Portable:** the UI does not require an application account.
+4. **Static-host friendly:** no build system is required.
+5. **Accessible:** keyboard focus and reduced-motion support are included.
+6. **Extendable:** each feature remains separated into a JavaScript module.

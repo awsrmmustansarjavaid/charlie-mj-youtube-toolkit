@@ -68,7 +68,7 @@ Do not put desktop-only logic into the core GitHub Pages frontend unless it is r
 ## Example Future Structure
 
 ```text
-youtube-learning-toolkit/
+charlie-mj-youtube-toolkit/
 │
 ├── index.html
 ├── css/
