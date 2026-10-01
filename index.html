@@ -193,7 +193,22 @@
                 <button id="clearTranscriptButton" class="secondary-button" type="button">Clear</button>
               </div>
 
-              <p id="subtitleSourceInfo" class="form-hint">Paste a YouTube URL above, then click Get Subtitles.</p>
+              <p id="subtitleSourceInfo" class="form-hint">Paste a YouTube URL above, then click Get Subtitles. The app tries the public transcript service first, then YouTube caption endpoints.</p>
+
+              <div class="subtitle-url-fallback">
+                <label for="subtitleUrlInput">Direct subtitle URL fallback</label>
+                <div class="url-row compact">
+                  <input id="subtitleUrlInput" type="url" placeholder="https://example.com/subtitles.vtt" autocomplete="off">
+                  <button id="fetchSubtitleUrlButton" class="secondary-button" type="button">Fetch URL</button>
+                </div>
+                <p class="form-hint">Use this when you already have a public SRT, VTT, or TXT subtitle URL.</p>
+              </div>
+
+              <div class="external-fallback-links">
+                <span class="muted">If automatic detection still fails:</span>
+                <a id="externalTranscriptLink" class="text-link" href="https://youtube-transcript.ai/" target="_blank" rel="noopener noreferrer">Open transcript fallback ↗</a>
+                <a id="noteeyFallbackLink" class="text-link" href="https://www.noteey.com/youtube-subtitle-downloader" target="_blank" rel="noopener noreferrer">Open Noteey ↗</a>
+              </div>
 
               <div class="optional-import">
                 <details>

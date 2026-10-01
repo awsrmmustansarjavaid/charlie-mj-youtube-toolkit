@@ -76,3 +76,15 @@ For larger production usage, replace the provider with a dedicated translation A
 ## Privacy
 
 Transcript text, notes, and saved sessions are handled in the browser by this project. Translation requests necessarily send the requested word/sentence to the translation provider. Users should avoid sending private or confidential text to third-party translation services.
+
+
+## Recovery and fallback flow
+
+1. Paste a YouTube URL.
+2. The browser calls the public transcript service first.
+3. If that fails, the app retries YouTube timed-text endpoints through browser-safe fallback routes.
+4. If that also fails, the UI provides a direct transcript URL link and Noteey link.
+5. Users can paste a public SRT/VTT/TXT URL into **Direct subtitle URL fallback**.
+6. Local subtitle upload remains available as the final manual fallback.
+
+The app is intentionally static and does not hide an API key in GitHub Pages. Third-party services can change availability, rate limits, or CORS policy.

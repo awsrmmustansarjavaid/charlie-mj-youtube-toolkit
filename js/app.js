@@ -63,6 +63,10 @@ const elements = {
   downloadTranscriptButton: document.querySelector("#downloadTranscriptButton"),
   shareSubtitleButton: document.querySelector("#shareSubtitleButton"),
   subtitleSourceInfo: document.querySelector("#subtitleSourceInfo"),
+  subtitleUrlInput: document.querySelector("#subtitleUrlInput"),
+  fetchSubtitleUrlButton: document.querySelector("#fetchSubtitleUrlButton"),
+  externalTranscriptLink: document.querySelector("#externalTranscriptLink"),
+  noteeyFallbackLink: document.querySelector("#noteeyFallbackLink"),
   subtitleFile: document.querySelector("#subtitleFile"),
   transcriptInput: document.querySelector("#transcriptInput"),
   cleanTranscriptButton: document.querySelector("#cleanTranscriptButton"),
@@ -193,6 +197,7 @@ async function analyzeVideo(value, autoFetch = false) {
   elements.subtitleStatusChip.textContent = "Subtitles not loaded";
   elements.videoThumbnail.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
   elements.openYouTubeLink.href = state.videoUrl;
+  updateExternalSubtitleLinks();
   elements.youtubeUrl.value = state.videoUrl;
   renderThumbnails(elements.thumbnailGrid, videoId);
   elements.thumbnailStatus.textContent = "Available public thumbnail variants";
@@ -222,6 +227,45 @@ function mountPlayer(videoId) {
   });
 }
 
+/** Update external fallback links for the current YouTube video. */
+function updateExternalSubtitleLinks() {
+  if (!state.videoId) return;
+  elements.externalTranscriptLink.href = `https://youtube-transcript.ai/transcript/${encodeURIComponent(state.videoId)}.txt`;
+  elements.noteeyFallbackLink.href = `https://www.noteey.com/youtube-subtitle-downloader`;
+}
+
+/** Fetch and parse a public SRT/VTT/TXT URL supplied by the user. */
+async function fetchDirectSubtitleUrl() {
+  const url = elements.subtitleUrlInput.value.trim();
+  if (!url) {
+    setStatus("Paste a direct SRT, VTT, or TXT subtitle URL first.", "error");
+    return;
+  }
+
+  elements.fetchSubtitleUrlButton.disabled = true;
+  setStatus("Fetching the subtitle URL...", "normal");
+  try {
+    const response = await fetch(url, { credentials: "omit", cache: "no-store" });
+    if (!response.ok) throw new Error(`Subtitle URL returned HTTP ${response.status}.`);
+    const raw = await response.text();
+    const parsed = cleanTranscript(parseTranscript(raw));
+    if (!parsed.length) throw new Error("The URL returned no readable SRT/VTT/TXT subtitle entries.");
+
+    state.transcript = parsed;
+    state.subtitleRaw = raw;
+    state.subtitleLanguage = elements.subtitleLanguage.value === "auto" ? "" : elements.subtitleLanguage.value;
+    elements.subtitleStatusChip.textContent = "Subtitle URL loaded";
+    elements.subtitleSourceInfo.textContent = `Source: direct subtitle URL • ${parsed.length} entries`;
+    renderTranscript();
+    renderTranslationOutput();
+    setStatus(`Loaded ${parsed.length} subtitle entries from the direct URL.`, "success");
+  } catch (error) {
+    setStatus(`Direct subtitle URL failed: ${error.message}. The server may block browser CORS requests.`, "error");
+  } finally {
+    elements.fetchSubtitleUrlButton.disabled = false;
+  }
+}
+
 /** Fetch the video's public subtitle track using the Noteey-style workflow. */
 async function getYouTubeSubtitles() {
   if (!state.videoId) {
@@ -241,14 +285,14 @@ async function getYouTubeSubtitles() {
     state.subtitleRaw = result.raw;
     state.subtitleLanguage = result.selectedTrack.language;
     elements.subtitleStatusChip.textContent = `${languageName(result.selectedTrack.language)} loaded`;
-    elements.subtitleSourceInfo.textContent = `Source: YouTube • ${languageName(result.selectedTrack.language)} • ${state.transcript.length} subtitle entries`;
+    elements.subtitleSourceInfo.textContent = `Source: ${result.source || "YouTube"} • ${languageName(result.selectedTrack.language)} • ${state.transcript.length} subtitle entries`;
     elements.subtitleLanguage.value = result.selectedTrack.language.startsWith("tr") ? "tr" : result.selectedTrack.language.startsWith("ur") ? "ur" : result.selectedTrack.language.startsWith("en") ? "en" : "auto";
     renderTranscript();
     renderTranslationOutput();
     setStatus(`Subtitles loaded successfully: ${state.transcript.length} entries in ${languageName(result.selectedTrack.language)}.`, "success");
   } catch (error) {
-    elements.subtitleSourceInfo.textContent = "YouTube subtitles could not be retrieved automatically for this video.";
-    setStatus(`${error.message} You can use the optional local subtitle fallback below.`, "error");
+    elements.subtitleSourceInfo.textContent = "Automatic subtitle retrieval failed. Use one of the external transcript links or a direct subtitle URL below.";
+    setStatus(`${error.message}`, "error");
   } finally {
     elements.getSubtitlesButton.disabled = false;
     elements.getYouTubeSubtitlesButton.disabled = false;
@@ -462,6 +506,7 @@ elements.getYouTubeSubtitlesButton.addEventListener("click", async () => {
   await analyzeVideo(elements.youtubeUrl.value, true);
 });
 elements.getSubtitlesButton.addEventListener("click", getYouTubeSubtitles);
+elements.fetchSubtitleUrlButton.addEventListener("click", fetchDirectSubtitleUrl);
 elements.subtitleFile.addEventListener("change", (event) => loadSubtitleFile(event.target.files[0]));
 elements.cleanTranscriptButton.addEventListener("click", processManualTranscript);
 elements.clearTranscriptButton.addEventListener("click", () => {
