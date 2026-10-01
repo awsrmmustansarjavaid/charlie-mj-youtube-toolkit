@@ -25,7 +25,8 @@ export function downloadTextFile(filename, content, mimeType = "text/plain;chars
   anchor.click();
   anchor.remove();
 
-  URL.revokeObjectURL(url);
+  // Give the browser time to start the download before releasing the object URL.
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 /**

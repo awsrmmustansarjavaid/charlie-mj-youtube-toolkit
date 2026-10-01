@@ -60,6 +60,7 @@ const elements = {
   wordByWordToggle: document.querySelector("#wordByWordToggle"),
   getYouTubeSubtitlesButton: document.querySelector("#getYouTubeSubtitlesButton"),
   getSubtitlesButton: document.querySelector("#getSubtitlesButton"),
+  copyTranscriptButton: document.querySelector("#copyTranscriptButton"),
   downloadTranscriptButton: document.querySelector("#downloadTranscriptButton"),
   shareSubtitleButton: document.querySelector("#shareSubtitleButton"),
   subtitleSourceInfo: document.querySelector("#subtitleSourceInfo"),
@@ -555,32 +556,93 @@ elements.restartButton.addEventListener("click", () => {
   }
 });
 
+/**
+ * Copy text reliably. Clipboard API is preferred on HTTPS GitHub Pages, with
+ * a temporary textarea fallback for browsers that deny clipboard permission.
+ */
+async function copyTextToClipboard(value) {
+  if (!value) throw new Error("Nothing to copy.");
+
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(value);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = value;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  if (!copied) throw new Error("Clipboard permission was denied.");
+}
+
 elements.copyTranscriptButton.addEventListener("click", async () => {
   const value = transcriptToText(state.transcript);
   if (!value) return setStatus("There is no transcript to copy yet.", "error");
+
   try {
-    await navigator.clipboard.writeText(value);
+    await copyTextToClipboard(value);
     setStatus("Subtitle text copied to the clipboard.", "success");
-  } catch {
-    setStatus("Clipboard access was blocked by the browser.", "error");
+    elements.copyTranscriptButton.textContent = "Copied ✓";
+    window.setTimeout(() => { elements.copyTranscriptButton.textContent = "Copy"; }, 1600);
+  } catch (error) {
+    setStatus(`Copy failed: ${error.message}`, "error");
   }
 });
 
 elements.downloadTranscriptButton.addEventListener("click", () => {
-  if (!state.transcript.length) return setStatus("Load subtitles before downloading.", "error");
-  downloadTextFile(`${state.videoId || "youtube"}-subtitles.txt`, transcriptToText(state.transcript));
-  setStatus("Subtitle text downloaded.", "success");
+  const value = transcriptToText(state.transcript);
+  if (!value) return setStatus("Load subtitles before downloading.", "error");
+
+  const safeId = (state.videoId || "youtube-subtitles").replace(/[^a-z0-9_-]/gi, "-");
+  downloadTextFile(`${safeId}-subtitles.txt`, value, "text/plain;charset=utf-8");
+  setStatus("Subtitle text downloaded successfully.", "success");
 });
 
-/* Copy a small share URL that reopens this static app with the same video/language. */
+/* Share the actual workspace URL when Web Share is available; otherwise copy it. */
 elements.shareSubtitleButton.addEventListener("click", async () => {
   if (!state.videoId) return setStatus("Analyze a YouTube video before sharing subtitles.", "error");
-  const shareUrl = `${window.location.origin}${window.location.pathname}?v=${encodeURIComponent(state.videoId)}&lang=${encodeURIComponent(state.subtitleLanguage || "auto")}`;
+
+  const shareUrl = new URL(window.location.href);
+  shareUrl.search = "";
+  shareUrl.searchParams.set("v", state.videoId);
+  shareUrl.searchParams.set("lang", state.subtitleLanguage || "auto");
+
+  const shareData = {
+    title: "Charlie MJ YouTube Toolkit",
+    text: `YouTube subtitle workspace for ${state.videoId}`,
+    url: shareUrl.toString()
+  };
+
   try {
-    await navigator.clipboard.writeText(shareUrl);
-    setStatus("Subtitle workspace link copied to the clipboard.", "success");
-  } catch {
-    window.prompt("Copy this subtitle workspace link:", shareUrl);
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ url: shareData.url }))) {
+      await navigator.share(shareData);
+      setStatus("Subtitle workspace shared successfully.", "success");
+      return;
+    }
+
+    await copyTextToClipboard(shareData.url);
+    setStatus("Share link copied to the clipboard.", "success");
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      setStatus("Share cancelled.", "info");
+      return;
+    }
+
+    try {
+      await copyTextToClipboard(shareData.url);
+      setStatus("Share dialog unavailable, so the link was copied instead.", "success");
+    } catch {
+      window.prompt("Copy this subtitle workspace link:", shareData.url);
+    }
   }
 });
 
